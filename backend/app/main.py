@@ -15,12 +15,12 @@ from app.core.config import settings
 from app.core.logging import setup_logging
 from app.database.connection import init_db, get_db
 
-from app.services.ai_predictor import ai_predictor_service
+from app.services.ai_predictor import ai_predictor_service, get_ai_predictor, AIPredictionService
 from app.workers.risk_monitor import risk_monitor_worker
 from app.websocket.manager import manager
 
 # Route Imports
-from app.api.v1.endpoints import predictions, sensors, weather, reports, volunteers, risk, zones, model, inventory, dashboard
+from app.api.v1.endpoints import predictions, sensors, weather, reports, volunteers, risk, zones, model, inventory, dashboard, disaster
 from app.websocket import routes as ws_routes
 
 setup_logging()
@@ -64,6 +64,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.parsed_cors_origins,
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -81,6 +82,7 @@ app.include_router(zones.router, prefix=f"{settings.API_V1_STR}", tags=["Zones"]
 app.include_router(model.router, prefix=f"{settings.API_V1_STR}/model", tags=["Model"])
 app.include_router(inventory.router, prefix=f"{settings.API_V1_STR}", tags=["Inventory"])
 app.include_router(dashboard.router, prefix=f"{settings.API_V1_STR}/dashboard", tags=["Dashboard"])
+app.include_router(disaster.router, prefix=f"{settings.API_V1_STR}/disaster", tags=["Disaster ML"])
 
 # Mount Native WebSocket Router
 app.include_router(ws_routes.router, tags=["WebSockets"])
@@ -134,6 +136,10 @@ def update_volunteer_status_alias(offer_id: int, payload: volunteers.VolunteerOf
     return volunteers.update_volunteer_status(offer_id=offer_id, payload=payload, db=db)
 
 
+@app.get("/model/status", tags=["Model Alias"])
+@app.get("/api/model/status", tags=["Model Alias"])
+def get_model_status_root_alias(ai_service: AIPredictionService = Depends(get_ai_predictor)):
+    return model.get_model_status(ai_service=ai_service)
 
 
 @app.get("/health", tags=["Health"])

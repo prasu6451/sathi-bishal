@@ -67,7 +67,17 @@ export const apiService = {
   // 6. Predict & Dashboard Overview
   predict: (data) => fetchAPI('/api/v1/predictions/predict', { method: 'POST', body: JSON.stringify(data) }),
   getDashboardOverview: () => fetchAPI('/api/v1/dashboard/overview'),
-  createAlert: (data) => fetchAPI('/api/v1/dashboard/alerts', { method: 'POST', body: JSON.stringify(data) })
+  createAlert: (data) => fetchAPI('/api/v1/dashboard/alerts', { method: 'POST', body: JSON.stringify(data) }),
+
+  // 7. Multi-Hazard Flood & Disaster ML Suite (7 Modules)
+  assessFloodSeverity: (data) => fetchAPI('/api/v1/disaster/flood-severity', { method: 'POST', body: JSON.stringify(data) }),
+  getRescuePriority: (data) => fetchAPI('/api/v1/disaster/rescue-priority', { method: 'POST', body: JSON.stringify(data) }),
+  getResourceAllocation: (data) => fetchAPI('/api/v1/disaster/resource-allocation', { method: 'POST', body: JSON.stringify(data) }),
+  clusterDisasterAreas: (data) => fetchAPI('/api/v1/disaster/cluster-areas', { method: 'POST', body: JSON.stringify(data) }),
+  classifySOSMessage: (data) => fetchAPI('/api/v1/disaster/classify-sos', { method: 'POST', body: JSON.stringify(data) }),
+  assessDamage: (data) => fetchAPI('/api/v1/disaster/damage-assessment', { method: 'POST', body: JSON.stringify(data) }),
+  getSafeRoute: (data) => fetchAPI('/api/v1/disaster/safe-route', { method: 'POST', body: JSON.stringify(data) }),
+  getUnifiedDisasterReport: (data) => fetchAPI('/api/v1/disaster/unified-pipeline', { method: 'POST', body: JSON.stringify(data) })
 };
 
 

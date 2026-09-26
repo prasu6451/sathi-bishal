@@ -96,6 +96,27 @@ export const riskZones = [
       rainfall_mm: 18.0
     }
   },
+  {
+    id: 'zone-floodplain-sivasagar-nepali-kuti',
+    name: 'Sivasagar Nepali Kuti Flood Zone',
+    type: 'flood',
+    risk_level: 'FLOOD PLAIN',
+    risk_category: 'FLOOD_PLAIN',
+    landslide_probability: 0.46,
+    coordinates: [
+      [26.975, 94.625],
+      [26.992, 94.632],
+      [26.988, 94.648],
+      [26.972, 94.645],
+      [26.970, 94.630],
+    ],
+    telemetry: {
+      temperature: 27.8,
+      humidity: 91,
+      soil_moisture: 0.65,
+      rainfall_mm: 52.0
+    }
+  },
 
   // 4. Low Risk Zone (Green)
   {

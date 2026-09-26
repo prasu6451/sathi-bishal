@@ -89,30 +89,10 @@ export default function About() {
           </div>
         </section>
 
-      
+
       </main>
 
-      <section className="creators-section">
-        <div className="section-heading">
-          <span className="section-kicker">Meet Our Team</span>
-          <h2>Our Creators</h2>
-        </div>
-
-        <div className="creator-grid">
-          {creators.map((creator) => (
-            <article className="creator-card" key={creator.name}>
-              <img className="creator-card__image" src={creator.image} alt={creator.name} />
-              <div className="creator-card__content">
-                <h3>{creator.name}</h3>
-                <p className="creator-card__role">{creator.role}</p>
-                <p className="creator-card__branch">
-                  <span>Branch:</span> {creator.branch}
-                </p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
+  
     </div>
   );
 }

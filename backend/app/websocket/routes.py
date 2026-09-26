@@ -31,6 +31,8 @@ async def websocket_risk_endpoint(websocket: WebSocket, db: Session = Depends(ge
 
         initial_data = []
         for p in latest_preds:
+            ts = getattr(p, "prediction_timestamp", None)
+            ts_str = ts.isoformat() if hasattr(ts, "isoformat") else str(ts or datetime.now(timezone.utc).isoformat())
             initial_data.append({
                 "prediction_id": p.id,
                 "location_id": p.location_id,
@@ -40,7 +42,7 @@ async def websocket_risk_endpoint(websocket: WebSocket, db: Session = Depends(ge
                 "risk_score": p.risk_score,
                 "risk_level": p.risk_level,
                 "model_version": p.model_version,
-                "timestamp": p.prediction_timestamp.isoformat()
+                "timestamp": ts_str
             })
 
         # Send initial_risk_state message

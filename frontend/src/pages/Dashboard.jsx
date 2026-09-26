@@ -21,6 +21,7 @@ const DEFAULT_ZONE_SUMMARY = [
   { district: 'Ukhrul (315 Dataset Incidents)', flood: 24, landslide: 78, status: 'High' },
   { district: 'Kamrup / Guwahati Basin', flood: 85, landslide: 48, status: 'High' },
   { district: 'Goalpara', flood: 90, landslide: 52, status: 'High' },
+  { district: 'Sivasagar (Nepali Kuti Flood Plain)', flood: 88, landslide: 32, status: 'High' },
 ];
 
 const DEFAULT_ALERTS = [

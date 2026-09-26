@@ -56,6 +56,15 @@ export default function Header({ isLoggedIn, onLogout }) {
               </NavLink>
 
               <NavLink
+                to="/disaster"
+                className={({ isActive }) =>
+                  `header__nav-link${isActive ? ' active' : ''}`
+                }
+              >
+                Disaster AI
+              </NavLink>
+
+              <NavLink
                 to="/sathi"
                 className={({ isActive }) =>
                   `header__nav-link${isActive ? ' active' : ''}`
@@ -147,6 +156,15 @@ export default function Header({ isLoggedIn, onLogout }) {
             onClick={() => setMobileOpen(false)}
           >
             Report
+          </NavLink>
+          <NavLink
+            to="/disaster"
+            className={({ isActive }) =>
+              `header__nav-link${isActive ? ' active' : ''}`
+            }
+            onClick={() => setMobileOpen(false)}
+          >
+            Disaster AI
           </NavLink>
           <NavLink
             to="/sathi"

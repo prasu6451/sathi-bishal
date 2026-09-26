@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import Report from './pages/Report';
 import AdminDashboard from './pages/AdminDashboard';
 import Sathi from './pages/Sathi';
+import DisasterManagement from './pages/DisasterManagement';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -28,8 +29,8 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/report" element={<Report />} />
         <Route path="/sathi" element={<Sathi />} />
+        <Route path="/disaster" element={<DisasterManagement />} />
         <Route path="/admin" element={<AdminDashboard />} />
-
       </Routes>
     </BrowserRouter>
   );

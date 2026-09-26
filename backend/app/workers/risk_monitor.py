@@ -10,7 +10,7 @@ from typing import List, Dict, Any, Optional
 
 from app.core.config import settings
 from app.database.connection import SessionLocal
-from app.database.repositories import RiskPredictionRepository, WeatherRepository
+from app.database.repositories import RiskPredictionRepository, WeatherRepository, SensorRepository
 from app.services.prediction_service import get_prediction_service
 from app.websocket.manager import manager
 from app.schemas.prediction import PredictionResponse

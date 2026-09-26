@@ -89,6 +89,22 @@ SPATIAL_ZONES = [
         "sample_soil": {"moisture_0_7cm": 0.48}
     },
 
+    # 5b. ASSAM — Sivasagar Nepali Kuti Flood Plain (FLOOD PLAIN RISK)
+    {
+        "id": "zone-assam-sivasagar-nepalikuti",
+        "name": "Sivasagar Nepali Kuti Flood Zone (Assam)",
+        "type": "flood",
+        "risk_level": "FLOOD PLAIN",
+        "risk_category": "FLOOD_PLAIN",
+        "risk_score": 46,
+        "landslide_probability": 0.46,
+        "coordinates": [[26.975, 94.625], [26.992, 94.632], [26.988, 94.648], [26.972, 94.645], [26.970, 94.630]],
+        "sample_location": {"latitude": 26.98, "longitude": 94.63},
+        "sample_terrain": {"elevation": 92.0, "slope": 2.2, "twi": 10.4},
+        "sample_rainfall": {"rain_1h": 6.5, "rain_24h": 52.0, "rain_3d": 95.0, "rain_7d": 160.0, "rain_14d": 230.0},
+        "sample_soil": {"moisture_0_7cm": 0.65}
+    },
+
     # 6. MEGHALAYA — Shillong Plateau & Cherrapunji (CRITICAL RED RISK)
     {
         "id": "zone-meghalaya-shillong",

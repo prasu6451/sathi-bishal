@@ -16,24 +16,41 @@ class Base(DeclarativeBase):
     pass
 
 
+def is_mysql_reachable(db_url: str) -> bool:
+    """Quick socket check to avoid OS TCP timeout delays when MySQL is offline."""
+    import socket
+    from urllib.parse import urlparse
+    try:
+        # Strip dialect if present
+        clean_url = db_url.split("+")[0] + "://" + db_url.split("://")[1] if "://" in db_url else db_url
+        parsed = urlparse(clean_url)
+        host = parsed.hostname or "127.0.0.1"
+        port = parsed.port or 3306
+        with socket.create_connection((host, port), timeout=0.8):
+            return True
+    except Exception:
+        return False
+
+
 def create_db_engine():
     """Create SQLAlchemy engine with MySQL -> SQLite fallback."""
     db_url = settings.DATABASE_URL
     try:
         if db_url.startswith("mysql"):
-            # Test MySQL connection parameters
-            engine = create_engine(
-                db_url,
-                pool_size=10,
-                max_overflow=20,
-                pool_recycle=3600,
-                connect_args={"connect_timeout": 5}
-            )
-            # Verify connection with a quick ping
-            with engine.connect() as conn:
-                pass
-            logger.info("Successfully connected to MySQL database.")
-            return engine
+            if is_mysql_reachable(db_url):
+                engine = create_engine(
+                    db_url,
+                    pool_size=10,
+                    max_overflow=20,
+                    pool_recycle=3600,
+                    connect_args={"connect_timeout": 2}
+                )
+                with engine.connect() as conn:
+                    pass
+                logger.info("Successfully connected to MySQL database.")
+                return engine
+            else:
+                logger.warning(f"MySQL server not reachable on configured port for {db_url}. Falling back to SQLite.")
     except Exception as err:
         logger.warning(f"Could not connect to MySQL database at {db_url}: {err}. Falling back to local SQLite database: sqlite:///./landslide_system.db")
 

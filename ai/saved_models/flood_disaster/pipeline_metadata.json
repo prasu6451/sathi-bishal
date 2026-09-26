@@ -1,0 +1,58 @@
+{
+  "pipeline_version": "flood-disaster-v1",
+  "description": "Integrated Flood & Multi-Hazard Disaster Management ML Suite",
+  "models": {
+    "flood_severity_cnn": {
+      "type": "Feature-Weighted Hydrodynamic Inundation Estimator",
+      "status": "active"
+    },
+    "rescue_priority_rf": {
+      "type": "RandomForestClassifier",
+      "n_estimators": 100,
+      "accuracy": 0.8867,
+      "features": [
+        "pop_density",
+        "sos_count",
+        "vulnerability",
+        "flood_depth",
+        "road_access"
+      ],
+      "status": "trained"
+    },
+    "resource_allocation_xgb": {
+      "type": "XGBRegressor",
+      "mae_litres": 409.31,
+      "status": "trained"
+    },
+    "area_clustering_kmeans": {
+      "type": "KMeans",
+      "clusters": 3,
+      "status": "active"
+    },
+    "sos_nlp_classifier": {
+      "type": "Keyword-Boosted Multi-Class NLP Classifier",
+      "categories": [
+        "MEDICAL_EMERGENCY",
+        "EVACUATION_TRAPPED",
+        "FOOD_WATER_NEED",
+        "MISSING_PERSON",
+        "GENERAL_ASSISTANCE"
+      ],
+      "status": "active"
+    },
+    "damage_assessment_model": {
+      "type": "Structural Hydrodynamic Vulnerability Index",
+      "status": "active"
+    },
+    "safe_route_graph_engine": {
+      "type": "Graph Detour Routing Engine",
+      "status": "active"
+    }
+  },
+  "supported_disasters": [
+    "Flood",
+    "Landslide",
+    "Flash Flood",
+    "Debris Flow"
+  ]
+}

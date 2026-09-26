@@ -11,7 +11,10 @@ from typing import List, Dict, Any, Optional
 logger = logging.getLogger("landslide_inventory_service")
 
 # Path to authoritative 11,026 landslide inventory dataset
-INVENTORY_JSON_PATH = Path("../SIH26001_DATA/01_landslide inventory/01_landslide_inventory_NE_8_states.json")
+_base_dir = Path(__file__).resolve().parent.parent.parent.parent
+INVENTORY_JSON_PATH = _base_dir / "SIH26001_DATA" / "01_landslide inventory" / "01_landslide_inventory_NE_8_states.json"
+if not INVENTORY_JSON_PATH.exists():
+    INVENTORY_JSON_PATH = Path("../SIH26001_DATA/01_landslide inventory/01_landslide_inventory_NE_8_states.json")
 
 
 class LandslideInventoryService:

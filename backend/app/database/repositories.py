@@ -113,7 +113,7 @@ class SensorRepository:
 
             results.append({
                 "sensor_id": s.sensor_id,
-                "location_id": s.location_id,
+                "location_id": getattr(s, "location_id", None),
                 "latitude": s.latitude,
                 "longitude": s.longitude,
                 "sensor_type": s.sensor_type,
