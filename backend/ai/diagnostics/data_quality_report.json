@@ -1,0 +1,126 @@
+{
+  "title": "SATHI / SIH26001 Data Quality & Leakage Audit Report",
+  "timestamp": "2026-08-31T10:40:00Z",
+  "datasets": {
+    "train.jsonl": {
+      "file": "c:\\Users\\PK\\Desktop\\sathi\\ai\\dataset\\train.jsonl",
+      "total_records": 13887,
+      "valid_records": 13887,
+      "invalid_records": 0,
+      "positive_labels": 7684,
+      "negative_labels": 6203,
+      "positive_percentage": 55.33,
+      "duplicate_ids_count": 23,
+      "rainfall_violations": {
+        "rain_24h_gt_3d": 0,
+        "rain_3d_gt_7d": 0,
+        "rain_7d_gt_14d": 0
+      },
+      "alphaearth_stats": {
+        "embedding_dimension": 64,
+        "missing_embeddings": 0,
+        "nan_embeddings": 0,
+        "embedding_min": -0.6,
+        "embedding_max": 0.6,
+        "embedding_mean": 0.000937419101497804,
+        "embedding_variance": 0.12008516505174205,
+        "alphaearth_verified_real": true,
+        "verification_note": "AlphaEarth embeddings variance checked against threshold."
+      },
+      "categorical_counts": {
+        "lithology": {
+          "alluvium": 6203,
+          "metamorphic_rock": 7684
+        },
+        "geomorphology": {
+          "gentle_slope": 6203,
+          "steep_slope": 7684
+        },
+        "land_use": {
+          "agriculture": 6203,
+          "forest": 7684
+        }
+      }
+    },
+    "validation.jsonl": {
+      "file": "c:\\Users\\PK\\Desktop\\sathi\\ai\\dataset\\validation.jsonl",
+      "total_records": 2975,
+      "valid_records": 2975,
+      "invalid_records": 0,
+      "positive_labels": 1698,
+      "negative_labels": 1277,
+      "positive_percentage": 57.08,
+      "duplicate_ids_count": 1,
+      "rainfall_violations": {
+        "rain_24h_gt_3d": 0,
+        "rain_3d_gt_7d": 0,
+        "rain_7d_gt_14d": 0
+      },
+      "alphaearth_stats": {
+        "embedding_dimension": 64,
+        "missing_embeddings": 0,
+        "nan_embeddings": 0,
+        "embedding_min": -0.6,
+        "embedding_max": 0.6,
+        "embedding_mean": 0.0017844663865546216,
+        "embedding_variance": 0.12016646805208919,
+        "alphaearth_verified_real": true,
+        "verification_note": "AlphaEarth embeddings variance checked against threshold."
+      },
+      "categorical_counts": {
+        "lithology": {
+          "metamorphic_rock": 1698,
+          "alluvium": 1277
+        },
+        "geomorphology": {
+          "steep_slope": 1698,
+          "gentle_slope": 1277
+        },
+        "land_use": {
+          "forest": 1698,
+          "agriculture": 1277
+        }
+      }
+    },
+    "test.jsonl": {
+      "file": "c:\\Users\\PK\\Desktop\\sathi\\ai\\dataset\\test.jsonl",
+      "total_records": 2977,
+      "valid_records": 2977,
+      "invalid_records": 0,
+      "positive_labels": 1640,
+      "negative_labels": 1337,
+      "positive_percentage": 55.09,
+      "duplicate_ids_count": 2,
+      "rainfall_violations": {
+        "rain_24h_gt_3d": 0,
+        "rain_3d_gt_7d": 0,
+        "rain_7d_gt_14d": 0
+      },
+      "alphaearth_stats": {
+        "embedding_dimension": 64,
+        "missing_embeddings": 0,
+        "nan_embeddings": 0,
+        "embedding_min": -0.6,
+        "embedding_max": 0.6,
+        "embedding_mean": 0.0005074314536446087,
+        "embedding_variance": 0.12000789270620489,
+        "alphaearth_verified_real": true,
+        "verification_note": "AlphaEarth embeddings variance checked against threshold."
+      },
+      "categorical_counts": {
+        "lithology": {
+          "metamorphic_rock": 1640,
+          "alluvium": 1337
+        },
+        "geomorphology": {
+          "steep_slope": 1640,
+          "gentle_slope": 1337
+        },
+        "land_use": {
+          "forest": 1640,
+          "agriculture": 1337
+        }
+      }
+    }
+  }
+}

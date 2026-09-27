@@ -1,0 +1,9 @@
+numpy>=1.22.0
+pandas>=1.4.0
+scikit-learn>=1.0.0
+xgboost>=1.6.0
+matplotlib>=3.5.0
+seaborn>=0.11.0
+joblib>=1.1.0
+earthengine-api>=0.1.300
+pytest>=7.0.0

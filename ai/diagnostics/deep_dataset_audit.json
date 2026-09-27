@@ -1,0 +1,112 @@
+{
+  "title": "SATHI / SIH26001 Deep Forensic Dataset Audit",
+  "timestamp": "2026-08-31T10:48:00Z",
+  "dataset_counts": {
+    "train": 13887,
+    "validation": 2975,
+    "test": 2977
+  },
+  "exact_duplicates_overlap": {
+    "id_overlap": {
+      "train_val": 5,
+      "train_test": 10,
+      "val_test": 1
+    },
+    "coord_overlap": {
+      "train_val": 120,
+      "train_test": 112,
+      "val_test": 41
+    }
+  },
+  "spatial_proximity": {
+    "sample_val_near_train_count_lt_1km": 102,
+    "average_min_distance_to_train_km": 4.77
+  },
+  "root_cause_explanation": "CONFIRMED ROOT CAUSE FOR 1.0 METRICS: The positive landslide samples were generated with high slopes (mean 39.5\u00b0, min 25.0\u00b0) and heavy 24h rainfall (mean 94.6mm, min 52.0mm), whereas negative samples were generated with flat terrain (mean 8.2\u00b0, max 15.0\u00b0) and light 24h rainfall (mean 9.8mm, max 19.0mm). Because slope <= 15\u00b0 and rain_24h <= 20mm perfectly separates positive and negative classes with 0% overlap, any linear or tree decision boundary achieves mathematically 100% (1.0) Recall, F1, and ROC-AUC.",
+  "feature_distribution_by_class": {
+    "rain_24h": {
+      "positive": {
+        "min": 52.9,
+        "max": 153.1,
+        "mean": 103.76,
+        "std": 22.47,
+        "median": 104.1
+      },
+      "negative": {
+        "min": 0.3,
+        "max": 18.7,
+        "mean": 9.57,
+        "std": 4.47,
+        "median": 9.5
+      }
+    },
+    "slope": {
+      "positive": {
+        "min": 25.0,
+        "max": 52.0,
+        "mean": 38.27,
+        "std": 7.85,
+        "median": 38.1
+      },
+      "negative": {
+        "min": 2.0,
+        "max": 15.0,
+        "mean": 8.41,
+        "std": 3.82,
+        "median": 8.2
+      }
+    },
+    "elevation": {
+      "positive": {
+        "min": 801.0,
+        "max": 2799.2,
+        "mean": 1802.48,
+        "std": 581.65,
+        "median": 1806.1
+      },
+      "negative": {
+        "min": 100.2,
+        "max": 699.8,
+        "mean": 403.51,
+        "std": 174.43,
+        "median": 405.6
+      }
+    }
+  },
+  "temporal_leakage_table": [
+    {
+      "feature": "rain_1h .. rain_14d",
+      "observation_time": "T",
+      "safe": true,
+      "reason": "Pre-event rainfall window"
+    },
+    {
+      "feature": "soil_moisture",
+      "observation_time": "T",
+      "safe": true,
+      "reason": "Pre-event soil moisture"
+    },
+    {
+      "feature": "terrain / slope / elev",
+      "observation_time": "Static",
+      "safe": true,
+      "reason": "Static SRTM DEM terrain"
+    },
+    {
+      "feature": "AlphaEarth embedding",
+      "observation_time": "Pre-event",
+      "safe": true,
+      "reason": "Pre-event satellite imagery representation"
+    },
+    {
+      "feature": "citizen_report",
+      "observation_time": "Post-event",
+      "safe": false,
+      "reason": "Generated after landslide event -> EXCLUDED FROM EARLY WARNING"
+    }
+  ],
+  "alphaearth_authenticity": {
+    "status": "UNVERIFIED",
+    "note": "AlphaEarth embeddings in current dataset are synthetic/placeholder vectors generated deterministically. Real Earth Engine AlphaEarth asset integration required for production deployment."
+  }
+}

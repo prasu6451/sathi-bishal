@@ -1,0 +1,37 @@
+{
+  "onehot_categorical_columns": [
+    "geology_lithology",
+    "geology_geomorphology",
+    "land_use_class"
+  ],
+  "known_categorical_values": {
+    "geology_lithology": [
+      "unknown",
+      "metamorphic_rock",
+      "sedimentary_rock",
+      "igneous_rock",
+      "unconsolidated_sediment",
+      "alluvium"
+    ],
+    "geology_geomorphology": [
+      "unknown",
+      "steep_slope",
+      "gentle_slope",
+      "valley_bottom",
+      "ridge",
+      "scarp",
+      "plateau"
+    ],
+    "land_use_class": [
+      "unknown",
+      "forest",
+      "agriculture",
+      "barren_land",
+      "built_up",
+      "shrubland",
+      "water_body"
+    ]
+  },
+  "embedding_dim": 64,
+  "feature_count": 109
+}

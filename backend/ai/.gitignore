@@ -1,0 +1,30 @@
+# Python byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Data and Models
+dataset/raw/*
+!dataset/raw/.gitkeep
+dataset/processed/*
+!dataset/processed/.gitkeep
+
+# Ignore large JSONL data files if needed, but allow synthetic sample files
+# train.jsonl
+# validation.jsonl
+# test.jsonl
+
+saved_models/*.json
+!saved_models/.gitkeep
+!saved_models/README.md
+
+experiments/results/*
+!experiments/results/.gitkeep
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+*.log

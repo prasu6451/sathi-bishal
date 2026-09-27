@@ -1,0 +1,62 @@
+{
+  "model_version": "xgb-v1",
+  "validation_version": "v2",
+  "timestamp": "2026-08-31T13:44:44.592929",
+  "random_test_metrics": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "roc_auc": 1.0,
+    "pr_auc": 1.0,
+    "brier": 3.999999999999317e-08,
+    "fpr": 0.0,
+    "fnr": 0.0,
+    "tp": 1640,
+    "fp": 0,
+    "tn": 1337,
+    "fn": 0
+  },
+  "spatial_holdout_metrics": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "roc_auc": 1.0,
+    "pr_auc": 1.0,
+    "brier": 3.999999999999198e-08,
+    "fpr": 0.0,
+    "fnr": 0.0,
+    "tp": 756,
+    "fp": 0,
+    "tn": 167,
+    "fn": 0
+  },
+  "temporal_holdout_metrics": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "roc_auc": 1.0,
+    "pr_auc": 1.0,
+    "brier": 3.999999999999317e-08,
+    "fpr": 0.0,
+    "fnr": 0.0,
+    "tp": 1640,
+    "fp": 0,
+    "tn": 1337,
+    "fn": 0
+  },
+  "hard_negative_metrics": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "roc_auc": 0.5,
+    "pr_auc": 0.9998000000000001,
+    "brier": 0.9996000399999999,
+    "fpr": 1.0,
+    "fnr": 0.0,
+    "tp": 0,
+    "fp": 300,
+    "tn": 0,
+    "fn": 0
+  },
+  "recommendation": "OPTION_A_KEEP_XGB_V1"
+}

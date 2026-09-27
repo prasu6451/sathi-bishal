@@ -12,12 +12,67 @@ export default function Header({ isLoggedIn, onLogout }) {
       <header className="header">
         <div className="header__inner">
           <Link to="/" className="header__logo">
+            <img src="sathi-logo.png" alt="logo" />
             <img src="/sathi-word-logo.png" alt="Sathi" />
           </Link>
 
           <div className="header__right">
             {/* Desktop nav */}
             <nav className="header__nav">
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  `header__nav-link${isActive ? ' active' : ''}`
+                }
+              >
+                home
+              </NavLink>
+
+              <NavLink
+                to="/liveMap"
+                className={({ isActive }) =>
+                  `header__nav-link${isActive ? ' active' : ''}`
+                }
+              >
+                live map
+              </NavLink>
+
+              <NavLink
+                to="/dashboard"
+                className={({ isActive }) =>
+                  `header__nav-link${isActive ? ' active' : ''}`
+                }
+              >
+                Dashboard
+              </NavLink>
+
+              <NavLink
+                to="/report"
+                className={({ isActive }) =>
+                  `header__nav-link${isActive ? ' active' : ''}`
+                }
+              >
+                Report
+              </NavLink>
+
+              <NavLink
+                to="/disaster"
+                className={({ isActive }) =>
+                  `header__nav-link${isActive ? ' active' : ''}`
+                }
+              >
+                Disaster AI
+              </NavLink>
+
+              <NavLink
+                to="/sathi"
+                className={({ isActive }) =>
+                  `header__nav-link${isActive ? ' active' : ''}`
+                }
+              >
+                Sathi Help
+              </NavLink>
+
               <NavLink
                 to="/about"
                 className={({ isActive }) =>
@@ -34,19 +89,11 @@ export default function Header({ isLoggedIn, onLogout }) {
               >
                 Contact
               </NavLink>
+
+
             </nav>
 
-            {/* Profile button */}
-            <button
-              className="header__profile-btn"
-              onClick={() => setShowProfile(true)}
-              aria-label="User profile"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-            </button>
+
 
             {/* Mobile hamburger */}
             <button
@@ -75,6 +122,69 @@ export default function Header({ isLoggedIn, onLogout }) {
       {mobileOpen && (
         <nav className="header__mobile-nav">
           <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `header__nav-link${isActive ? ' active' : ''}`
+            }
+            onClick={() => setMobileOpen(false)}
+          >
+            home
+          </NavLink>
+          <NavLink
+            to="/liveMap"
+            className={({ isActive }) =>
+              `header__nav-link${isActive ? ' active' : ''}`
+            }
+            onClick={() => setMobileOpen(false)}
+          >
+            live map
+          </NavLink>
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              `header__nav-link${isActive ? ' active' : ''}`
+            }
+            onClick={() => setMobileOpen(false)}
+          >
+            Dashboard
+          </NavLink>
+          <NavLink
+            to="/report"
+            className={({ isActive }) =>
+              `header__nav-link${isActive ? ' active' : ''}`
+            }
+            onClick={() => setMobileOpen(false)}
+          >
+            Report
+          </NavLink>
+          <NavLink
+            to="/disaster"
+            className={({ isActive }) =>
+              `header__nav-link${isActive ? ' active' : ''}`
+            }
+            onClick={() => setMobileOpen(false)}
+          >
+            Disaster AI
+          </NavLink>
+          <NavLink
+            to="/sathi"
+            className={({ isActive }) =>
+              `header__nav-link${isActive ? ' active' : ''}`
+            }
+            onClick={() => setMobileOpen(false)}
+          >
+            Sathi Help
+          </NavLink>
+          <NavLink
+            to="/admin"
+            className={({ isActive }) =>
+              `header__nav-link${isActive ? ' active' : ''}`
+            }
+            onClick={() => setMobileOpen(false)}
+          >
+            Admin
+          </NavLink>
+          <NavLink
             to="/about"
             className={({ isActive }) =>
               `header__nav-link${isActive ? ' active' : ''}`
@@ -83,6 +193,7 @@ export default function Header({ isLoggedIn, onLogout }) {
           >
             About
           </NavLink>
+
           <NavLink
             to="/contact"
             className={({ isActive }) =>
