@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { MapContainer, TileLayer, Polygon, Tooltip, Marker, Popup, Circle } from 'react-leaflet';
 import L from 'leaflet';
 import MapLegend from './MapLegend';
 import { riskZones as staticRiskZones, MAP_CENTER, MAP_ZOOM } from '../data/riskZones';
 import { apiService } from '../services/api';
+import { useRealTimeRisk } from '../context/RealTimeContext';
 import 'leaflet/dist/leaflet.css';
 import './MapView.css';
 
@@ -14,6 +15,17 @@ L.Icon.Default.mergeOptions({
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
+
+// Helper to compute centroid of polygon coordinates
+function getZoneCenter(coordinates) {
+  if (!coordinates || !coordinates.length) return [26.15, 91.75];
+  let sumLat = 0, sumLon = 0;
+  coordinates.forEach(([lat, lon]) => {
+    sumLat += lat;
+    sumLon += lon;
+  });
+  return [sumLat / coordinates.length, sumLon / coordinates.length];
+}
 
 // Custom RED pin icon for citizen help requests
 const redCitizenMarkerIcon = L.divIcon({
@@ -41,10 +53,10 @@ const greenVolunteerMarkerIcon = L.divIcon({
 const CATEGORY_STYLES = {
   CRITICAL: {
     fillColor: '#EF4444',
-    fillOpacity: 0.40,
+    fillOpacity: 0.45,
     color: '#DC2626',
-    weight: 2,
-    opacity: 0.90,
+    weight: 2.5,
+    opacity: 0.95,
     label: 'Critical Risk',
     badgeBg: '#FEE2E2',
     badgeColor: '#991B1B',
@@ -72,13 +84,12 @@ const CATEGORY_STYLES = {
     badgeColor: '#1E40AF',
     alertText: '⚠️ ALERT: FLOOD WATCH'
   },
-
   LOW: {
     fillColor: '#22C55E',
-    fillOpacity: 0.40,
+    fillOpacity: 0.35,
     color: '#16A34A',
-    weight: 2,
-    opacity: 0.90,
+    weight: 1.5,
+    opacity: 0.85,
     label: 'Low Risk',
     badgeBg: '#DCFCE7',
     badgeColor: '#166534',
@@ -91,6 +102,8 @@ export default function MapView({ version = "default", height }) {
   const [selectedZone, setSelectedZone] = useState(null);
   const [acceptedReports, setAcceptedReports] = useState([]);
   const [volunteerOffers, setVolunteerOffers] = useState([]);
+
+  const { wsStatus, liveRiskMap, liveTelemetryMap, lastUpdateTime, isSimulating, toggleSimulation } = useRealTimeRisk();
 
   useEffect(() => {
     async function fetchLiveZones() {
@@ -133,6 +146,38 @@ export default function MapView({ version = "default", height }) {
     fetchVolunteerOffers();
   }, []);
 
+  // Compute live-enhanced zones merging real-time WebSocket state
+  const enrichedZones = useMemo(() => {
+    return zones.map((zone) => {
+      const [cLat, cLon] = getZoneCenter(zone.coordinates);
+      let match = null;
+
+      for (const item of Object.values(liveRiskMap)) {
+        if (item.latitude !== undefined && item.longitude !== undefined) {
+          const dist = Math.hypot(item.latitude - cLat, item.longitude - cLon);
+          if (dist < 0.45) {
+            match = item;
+            break;
+          }
+        }
+      }
+
+      if (match) {
+        return {
+          ...zone,
+          risk_level: match.risk_level || zone.risk_level,
+          risk_category: match.risk_level || zone.risk_category,
+          risk_score: match.risk_score !== undefined ? match.risk_score : zone.risk_score,
+          landslide_probability: match.landslide_probability !== undefined ? match.landslide_probability : zone.landslide_probability,
+          telemetry: match.telemetry || zone.telemetry,
+          isLiveUpdated: true,
+          lastUpdated: match.lastUpdated || match.timestamp
+        };
+      }
+      return zone;
+    });
+  }, [zones, liveRiskMap]);
+
   const getRiskCategory = (zone) => {
     if (!zone) return 'LOW';
     const cat = (zone.risk_category || zone.risk_level || '').toUpperCase().replace(/\s+/g, '_');
@@ -143,7 +188,7 @@ export default function MapView({ version = "default", height }) {
     if (cat.includes('LOW')) return 'LOW';
 
     const prob = zone.landslide_probability || 0.0;
-    if (prob >= 0.80) return 'CRITICAL';
+    if (prob >= 0.75) return 'CRITICAL';
     if (prob >= 0.50) return 'HIGH';
     if (prob >= 0.25) return 'FLOOD_PLAIN';
     return 'LOW';
@@ -172,12 +217,38 @@ export default function MapView({ version = "default", height }) {
     };
   };
 
-  const selectedCategory = getRiskCategory(selectedZone);
+  const activeSelectedZone = useMemo(() => {
+    if (!selectedZone) return null;
+    return enrichedZones.find((z) => z.id === selectedZone.id) || selectedZone;
+  }, [selectedZone, enrichedZones]);
+
+  const selectedCategory = getRiskCategory(activeSelectedZone);
   const selectedStyle = CATEGORY_STYLES[selectedCategory] || CATEGORY_STYLES.LOW;
-  const activeTelemetry = getTelemetry(selectedZone);
+  const activeTelemetry = getTelemetry(activeSelectedZone);
 
   return (
     <div className={`map-wrapper ${version}`}>
+      {/* Floating Real-Time Status HUD */}
+      <div className="map-realtime-hud">
+        <div className="map-realtime-hud__status">
+          <span className={`hud-status-dot hud-status-dot--${wsStatus.toLowerCase()}`} />
+          <span className="hud-status-text">
+            {wsStatus === 'LIVE' ? 'Real-Time WebSocket: Live' : (wsStatus === 'CONNECTING' ? 'Connecting to Stream...' : 'Offline / Reconnecting')}
+          </span>
+          {lastUpdateTime && (
+            <span className="hud-last-tick">
+              (Updated {lastUpdateTime.toLocaleTimeString()})
+            </span>
+          )}
+        </div>
+        <button
+          className={`hud-sim-btn ${isSimulating ? 'active' : ''}`}
+          onClick={() => toggleSimulation()}
+          title="Toggle client-side continuous telemetry ingestion stream"
+        >
+          {isSimulating ? '⏹️ Stop Live Sim' : '⚡ Stream Live Telemetry'}
+        </button>
+      </div>
       <MapContainer
         center={MAP_CENTER}
         zoom={MAP_ZOOM}
@@ -190,8 +261,8 @@ export default function MapView({ version = "default", height }) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {/* Render Risk Zone Polygons */}
-        {zones.map((zone) => {
+        {/* Render Risk Zone Polygons with Real-Time Updates */}
+        {enrichedZones.map((zone) => {
           const catKey = getRiskCategory(zone);
           const styleConfig = CATEGORY_STYLES[catKey] || CATEGORY_STYLES.LOW;
           const proneLabel = getProneLabel(zone);
@@ -204,8 +275,9 @@ export default function MapView({ version = "default", height }) {
               positions={zone.coordinates}
               pathOptions={{
                 ...styleConfig,
-                weight: isSelected ? 4 : 2,
-                fillOpacity: isSelected ? 0.65 : 0.40
+                weight: isSelected ? 4 : (zone.isLiveUpdated ? 3 : 2),
+                fillOpacity: isSelected ? 0.65 : (zone.isLiveUpdated ? 0.52 : 0.40),
+                dashArray: zone.isLiveUpdated ? '6, 4' : null
               }}
               eventHandlers={{
                 click: () => setSelectedZone(zone)
@@ -213,9 +285,16 @@ export default function MapView({ version = "default", height }) {
             >
               <Tooltip direction="top" sticky>
                 <div style={{ fontSize: '12px', lineHeight: '1.4', padding: '2px' }}>
-                  <strong style={{ fontSize: '13px', color: '#0F172A', display: 'block', marginBottom: '2px' }}>
-                    {zone.name}
-                  </strong>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
+                    <strong style={{ fontSize: '13px', color: '#0F172A', display: 'block', marginBottom: '2px' }}>
+                      {zone.name}
+                    </strong>
+                    {zone.isLiveUpdated && (
+                      <span style={{ fontSize: '9px', background: '#10B981', color: 'white', fontWeight: '800', padding: '1px 5px', borderRadius: '3px' }}>
+                        LIVE ⚡
+                      </span>
+                    )}
+                  </div>
 
                   {/* Prone Designation */}
                   <div style={{

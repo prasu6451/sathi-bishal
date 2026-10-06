@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { apiService } from '../services/api';
 import MapView from '../components/MapView';
 import ModelStatusCard from '../components/ModelStatusCard';
 import IoTSensorPanel from '../components/IoTSensorPanel';
+import { useRealTimeRisk } from '../context/RealTimeContext';
 import './dashboard.css';
 
 const DEFAULT_STAT_CARDS = [
@@ -39,7 +40,6 @@ const DEFAULT_RECOMMENDATIONS = [
   'Position heavy earthmoving clearing machinery along NH-29 Kohima corridor.',
 ];
 
-
 const DEFAULT_TREND_DATA = [
   { label: 'Mon', value: 42 },
   { label: 'Tue', value: 56 },
@@ -59,6 +59,8 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [isLiveBackend, setIsLiveBackend] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
+
+  const { wsStatus, realtimeAlerts, lastUpdateTime, isSimulating, toggleSimulation } = useRealTimeRisk();
 
   // Add Alert Form State
   const [showAddAlert, setShowAddAlert] = useState(false);
@@ -89,9 +91,17 @@ export default function Dashboard() {
 
   useEffect(() => {
     loadDashboardData();
+  }, [lastUpdateTime]);
+
+  useEffect(() => {
     const interval = setInterval(loadDashboardData, 30000);
     return () => clearInterval(interval);
   }, []);
+
+  // Combine real-time alerts with static/DB alerts
+  const combinedAlerts = useMemo(() => {
+    return [...realtimeAlerts, ...alerts];
+  }, [realtimeAlerts, alerts]);
 
   const handleCreateAlertSubmit = async (e) => {
     e.preventDefault();
@@ -336,21 +346,28 @@ export default function Dashboard() {
 
             <article className="panel alert-panel">
               <div className="panel__header">
-                <h2>Critical Alerts</h2>
-                <span className="panel__tag panel__tag--alert">{alerts.length} active</span>
+                <h2>Critical Alerts & Live Incidents</h2>
+                <span className="panel__tag panel__tag--alert">{combinedAlerts.length} active</span>
               </div>
 
               <div className="alert-list">
-                {alerts.map((alert) => (
-                  <div key={`${alert.type}-${alert.title}-${alert.time}`} className="alert-item">
+                {combinedAlerts.map((alert, idx) => (
+                  <div key={alert.id || `${alert.type}-${alert.title}-${alert.time}-${idx}`} className="alert-item">
                     <div className="alert-item__topline">
-                      <span className={`alert-pill alert-pill--${alert.type.toLowerCase()}`}>{alert.type}</span>
+                      <span className={`alert-pill alert-pill--${(alert.type || 'alert').toLowerCase().replace(/\s+/g, '-')}`}>
+                        {alert.type}
+                      </span>
+                      {alert.id?.startsWith('rt-alert-') && (
+                        <span style={{ fontSize: '10px', background: '#DC2626', color: 'white', fontWeight: '800', padding: '1px 6px', borderRadius: '4px' }}>
+                          LIVE ⚡
+                        </span>
+                      )}
                       <span className="alert-time">{alert.time}</span>
                     </div>
                     <h3>{alert.title}</h3>
                     <p>{alert.description}</p>
                     <div className="alert-item__footer">
-                      <span className={`severity severity--${alert.severity.toLowerCase()}`}>{alert.severity}</span>
+                      <span className={`severity severity--${(alert.severity || 'high').toLowerCase()}`}>{alert.severity}</span>
                     </div>
                   </div>
                 ))}

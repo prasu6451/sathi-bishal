@@ -233,3 +233,109 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Floating Real-Time Status HUD on Map */
+.map-realtime-hud {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 850;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  font-size: 12px;
+  color: white;
+}
+
+.map-realtime-hud__status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.hud-status-dot--live {
+  background: #22C55E;
+  box-shadow: 0 0 10px #22C55E;
+  animation: hudPulse 1.8s infinite;
+}
+
+.hud-status-dot--connecting {
+  background: #F59E0B;
+  box-shadow: 0 0 8px #F59E0B;
+  animation: hudPulse 1s infinite;
+}
+
+.hud-status-dot--reconnecting,
+.hud-status-dot--disconnected {
+  background: #EF4444;
+}
+
+.hud-status-text {
+  font-weight: 600;
+  font-size: 11.5px;
+  letter-spacing: 0.2px;
+}
+
+.hud-last-tick {
+  font-size: 10px;
+  color: #94A3B8;
+}
+
+.hud-sim-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hud-sim-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.hud-sim-btn.active {
+  background: #DC2626;
+  border-color: #EF4444;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+  animation: hudSimPulse 2s infinite;
+}
+
+@keyframes hudPulse {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.25); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+@keyframes hudSimPulse {
+  0% { opacity: 0.85; }
+  50% { opacity: 1; }
+  100% { opacity: 0.85; }
+}
+
+@media (max-width: 640px) {
+  .map-realtime-hud {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    justify-content: space-between;
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}
+

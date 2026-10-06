@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { apiService } from '../services/api';
+import { useRealTimeRisk } from '../context/RealTimeContext';
 
 const MONITORED_STATIONS = [
   { id: 'SENSOR_GUWAHATI', name: 'Guwahati Ridge Station (Assam)', lat: 26.15, lon: 91.75 },
@@ -15,6 +16,7 @@ const MONITORED_STATIONS = [
 export default function IoTSensorPanel() {
   const [sensors, setSensors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { lastUpdateTime, wsStatus } = useRealTimeRisk();
 
   // Simulation Controls State
   const [selectedStation, setSelectedStation] = useState(MONITORED_STATIONS[1].id);
@@ -40,6 +42,9 @@ export default function IoTSensorPanel() {
 
   useEffect(() => {
     fetchSensors();
+  }, [lastUpdateTime]);
+
+  useEffect(() => {
     const interval = setInterval(fetchSensors, 15000);
     return () => clearInterval(interval);
   }, []);

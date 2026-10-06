@@ -10,6 +10,7 @@ import Report from './pages/Report';
 import AdminDashboard from './pages/AdminDashboard';
 import Sathi from './pages/Sathi';
 import DisasterManagement from './pages/DisasterManagement';
+import { RealTimeProvider } from './context/RealTimeContext';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -19,20 +20,22 @@ export default function App() {
   };
 
   return (
-    <BrowserRouter>
-      <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/liveMap" element={<LiveMap />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/report" element={<Report />} />
-        <Route path="/sathi" element={<Sathi />} />
-        <Route path="/disaster" element={<DisasterManagement />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-      </Routes>
-    </BrowserRouter>
+    <RealTimeProvider>
+      <BrowserRouter>
+        <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/liveMap" element={<LiveMap />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/report" element={<Report />} />
+          <Route path="/sathi" element={<Sathi />} />
+          <Route path="/disaster" element={<DisasterManagement />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+        </Routes>
+      </BrowserRouter>
+    </RealTimeProvider>
   );
 }
 

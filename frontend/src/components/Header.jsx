@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import ProfileModal from './ProfileModal';
+import { useRealTimeRisk } from '../context/RealTimeContext';
 import './Header.css';
 
 export default function Header({ isLoggedIn, onLogout }) {
   const [showProfile, setShowProfile] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { wsStatus, isSimulating, toggleSimulation } = useRealTimeRisk();
 
   return (
     <>
@@ -89,11 +91,22 @@ export default function Header({ isLoggedIn, onLogout }) {
               >
                 Contact
               </NavLink>
-
-
             </nav>
 
-
+            {/* Live WebSocket Status Pill & Simulation Toggle */}
+            <div className="header__live-status">
+              <span className={`header__status-dot header__status-dot--${wsStatus.toLowerCase()}`} />
+              <span className="header__status-text">
+                {wsStatus === 'LIVE' ? 'LIVE' : (wsStatus === 'CONNECTING' ? 'CONNECTING' : 'OFFLINE')}
+              </span>
+              <button
+                className={`header__sim-btn ${isSimulating ? 'active' : ''}`}
+                onClick={() => toggleSimulation()}
+                title={isSimulating ? 'Stop live telemetry simulation' : 'Start live telemetry simulation'}
+              >
+                {isSimulating ? '⏹️ Live Sim' : '⚡ Stream'}
+              </button>
+            </div>
 
             {/* Mobile hamburger */}
             <button
